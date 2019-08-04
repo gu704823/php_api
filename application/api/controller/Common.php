@@ -119,4 +119,8 @@ class Common extends Controller
                 break;
         }
     }
+    //上传文件
+    public function upload_file($file,$type=''){
+
+    }
 }

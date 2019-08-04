@@ -15,6 +15,7 @@ class Code extends Common
 
       $user_name = $params['username'];
       $is_exit = $params['is_exist'];
+
       $username_type = $this->checkUsername($user_name);
       switch ($username_type){
           case 'phone':

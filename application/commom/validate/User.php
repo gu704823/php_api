@@ -17,7 +17,10 @@ class User extends Validate
       'username|用户名'=>'require',
       'is_exist|用户是否存在'=>'require|length:1',
 
-      'code|验证码'=>'require|number|length:6'
+      'code|验证码'=>'require|number|length:6',
+
+      'user_id|用户ID'=>'require|number',
+      'user_icon|用户头像'=>'require|image|fileSize:2000000|fileExt:jpeg,jpg,png'
 
   ];
   //登录场景
@@ -32,4 +35,9 @@ class User extends Validate
     protected  function  sceneRegister(){
       return $this->only(['username','user_pwd','code']);
     }
+    //用户头像上传场景
+    protected function sceneUser_head_icon(){
+      return $this->only(['user_id','user_icon']);
+    }
+
 }

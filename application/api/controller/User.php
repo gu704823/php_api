@@ -60,6 +60,22 @@ class User extends Common
             $this->return_msg(400,'用户注册失败'.$result);
         }
     }
+    public function user_icon(){
+        //validate
+        $data = $this->check_params('user_head_icon',request()->param(true));
+        //
+        $head_img_path = $this->upload_file($data['user_icon'],'head_img');
+        $head_icon['user_id']=$data['user_id'];
+        $head_icon['user_icon']=$head_img_path;
+        $result = model('User')->upload_head_icon($head_icon);
+        if($result==1){
+            $this->return_msg(200,'用户头像上传成功',$head_img_path);
+        }else{
+            $this->return_msg(400,'用户头像上传失败');
+        }
+
+
+    }
 
 
 
