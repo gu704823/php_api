@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  // export function request(config,succcess,failure){
+  //   const instance = axios.create({
+  //     baseUrl:'http://......',
+  //     timeout:5000
+  //   });
+  //   instance(config).
+  //   then(
+  //     res=>{
+  //       succcess(res)
+  //     }
+  //   ).catch(
+  //     err=>{
+  //       failure(err)
+  //     }
+  //   )
+  // }
+
+ // let axios = {
+ //   create:function(a){
+ //     return a.baseUrl;
+ //   }
+ //  }
+ //  axios.create()
+
+  //js 回调函数，箭头函数，结合使用
+  //a为{}，b为function
+  function function1(a,b){b(a);}
+  function1({url:1,},a=>{console.log(a);});
+
+//promise
+ function request(config) {
+  return new Promise((resolve,reject)=>{
+    const instance = axios.create({
+      baseUrl:'',
+      timeout:5000,
+    })
+    instance(config).then(res=>{resolve(res)}).catch(err=>{reject(err)})
+  })
+}
+request({
+  url:''
+}).then().catch()
+// let function3 = function1(resolve,reject){
+//
+//   }
+</script>
+</body>
+</html>
