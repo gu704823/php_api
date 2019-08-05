@@ -14,6 +14,8 @@ class User extends Validate
       'user_name|用户名'=>'require',
       'user_pwd|密码'=>'require|length:32',
 
+      'user_init_pwd|密码'=>'require|length:32',
+
       'username|用户名'=>'require',
       'is_exist|用户是否存在'=>'require|length:1',
 
@@ -37,7 +39,15 @@ class User extends Validate
     }
     //用户头像上传场景
     protected function sceneUser_head_icon(){
-      return $this->only(['user_icon']);
+      return $this->only(['user_icon,user_id']);
+    }
+    //修改密码
+    protected function sceneChange_pwd(){
+        return $this->only(['user_name,user_init_pwd,user_pwd']);
+    }
+    //找回密码
+    protected function sceneFind_pwd(){
+        return $this->only(['user_name,code,user_pwd']);
     }
 
 }

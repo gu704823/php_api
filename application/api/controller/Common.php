@@ -55,7 +55,6 @@ class Common extends Controller
             $this->return_msg(400,'token值不正确',['前端token值不正确']);
         }
     }
-
     public function return_msg($code,$msg='',$data=[]){
         $return_data['code']=$code;
         $return_data['msg']=$msg;
@@ -71,7 +70,7 @@ class Common extends Controller
         $flag= $is_email+$is_phone;
         switch ($flag){
             case 2:
-                $this->return_msg('400','邮箱手机号错误');
+                $this->return_msg('400','邮箱,手机号错误');
                 break;
             case 3:
                 return 'email';
@@ -131,7 +130,7 @@ class Common extends Controller
            $path = '/uploads/'.$info->getSaveName();
            if(!empty($type)){
                $this->image_edit($path,$type);
-               return $path;
+               return str_replace('\\','/',$path);
            }else{
                $this->return_msg(400,$file->getError());
            }

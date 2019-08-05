@@ -60,16 +60,16 @@ class User extends Common
             $this->return_msg(400,'用户注册失败'.$result);
         }
     }
+
+    //上传用户头像
     public function user_icon(){
         //validate
         $data = $this->check_params('user_head_icon',request()->param(true));
         //
 
         $head_img_path = $this->upload_file($data['user_icon'],'head_img');
-        die;
-        $head_icon['user_id']=$data['user_id'];
-        $head_icon['user_icon']=$head_img_path;
-        $result = model('User')->upload_head_icon($head_icon);
+        $data['user_icon']=$head_img_path;
+        $result = model('User')->upload_head_icon($data);
         if($result==1){
             $this->return_msg(200,'用户头像上传成功',$head_img_path);
         }else{
@@ -79,17 +79,71 @@ class User extends Common
 
     }
 
-
-
-//validate 场景
-    public function check_params($check_scene, $arr)
+    //用户修改密码（token，time，user_name,user_ini_pwd,user_new_pwd）
+    public function change_pwd()
     {
-        $validate = new \app\commom\validate\User();
-        if (!$validate->scene($check_scene)->check($arr)) {
-            $this->return_msg(400, $validate->getError
-            ());
+        $data = $this->check_params('change_pwd', request()->except(['time', 'token']));
+        //检测用户名是手机号还是邮箱
+        $user_name_type = $this->checkUsername($data['user_name']);
+        switch ($user_name_type) {
+            case 'phone':
+                $this->check_exist($data['user_name'],'phone',1);
+                $where['user_phone']=$data['user_name'];
+                break;
+            case 'email':
+                $this->check_exist($data['user_name'],'email',1);
+                $where['user_email']=$data['user_name'];
+                break;
         }
-        return $arr;
+        //判断原始密码是否正确
+        $db_ini_pwd = model('User')->query_user_pwd($where);
+        if($db_ini_pwd!==$data['user_init_pwd']){
+            $this->return_msg(200,'你输入原始密码不正确');
+        }
+        //注入新密码
+        $res = model('User')->update_user_pwd($where,$data['user_new_pwd']);
+        if($res !== false){
+            $this->return_msg(200,'密码修改成功');
+        }else{
+            $this->return_msg(400,'密码修改失败');
+        }
     }
+
+    //用户找回密码 user_name,code,user_pwd
+    public function  find_pwd(){
+        $data = $this->check_params('find_pwd', request()->except(['time', 'token']));
+        //检测验证码
+        $this->check_code($data['user_name'],$data['code']);
+        //检测用户名
+        $user_name_type = $this->checkUsername($data['user_name']);
+        switch ($user_name_type){
+            case 'phone':
+                $this->check_exist($data['user_name'],'phone',1);
+                $where['user_phone']=$data['user_name'];
+                break;
+            case 'email':
+                $this->check_exist($data['user_name'],'email',1);
+                $where['user_email']=$data['user_name'];
+                break;
+        }
+        //注入新密码
+        $res = model('User')->update_user_pwd($where,$data['user_pwd']);
+        if($res !== false){
+            $this->return_msg(200,'密码修改成功');
+        }else{
+            $this->return_msg(400,'密码修改失败');
+        }
+
+    }
+    //validate 场景
+    public function check_params($check_scene, $arr)
+        {
+            $validate = new \app\commom\validate\User();
+            if (!$validate->scene($check_scene)->check($arr)) {
+                $this->return_msg(400, $validate->getError
+                ());
+            }
+            return $arr;
+        }
 }
-//check
+//checkx

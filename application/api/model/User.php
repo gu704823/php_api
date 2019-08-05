@@ -33,6 +33,22 @@ class User extends Model
          }
          return $result;
      }
+     public function upload_head_icon($data){
+         $result = $this->where('user_id',$data['user_id'])->setField('user_icon',$data['user_icon']);
+         if($result){
+             return 1;
+         }else{
+             return $this->getError();
+         }
+
+     }
+     public function query_user_pwd($data){
+         return $this->where($data)->value('user_pwd');
+     }
+    public function update_user_pwd($data1,$data2){
+        $result =  $this->where($data1)->setField('user_pwd',$data2);
+        return $result;
+    }
 
 
 
