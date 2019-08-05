@@ -8,6 +8,11 @@
 namespace app\api\controller;
 use think\Controller;
 use think\facade\Validate;
+use think\facade\Env;
+use think\Image;
+
+define('ROOTPATH',Env::get('root_path'));
+define('DS',DIRECTORY_SEPARATOR);
 
 class Common extends Controller
 {
@@ -121,6 +126,25 @@ class Common extends Controller
     }
     //上传文件
     public function upload_file($file,$type=''){
+       $info  = $file->move(ROOTPATH.'public'.DS.'uploads');
+       if($info){
+           $path = '/uploads/'.$info->getSaveName();
+           if(!empty($type)){
+               $this->image_edit($path,$type);
+               return $path;
+           }else{
+               $this->return_msg(400,$file->getError());
+           }
+       }
+    }
+    //裁剪图片
+    public function image_edit($path,$type){
+        $image = Image::open(ROOTPATH.'public'.$path);
+        switch ($type){
+            case 'head_img':
+                $image->thumb(200,200,Image::THUMB_CENTER)->save(ROOTPATH.'public'.$path);
+                break;
+        }
 
     }
 }

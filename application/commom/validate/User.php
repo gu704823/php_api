@@ -37,7 +37,7 @@ class User extends Validate
     }
     //用户头像上传场景
     protected function sceneUser_head_icon(){
-      return $this->only(['user_id','user_icon']);
+      return $this->only(['user_icon']);
     }
 
 }

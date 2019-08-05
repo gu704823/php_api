@@ -64,7 +64,9 @@ class User extends Common
         //validate
         $data = $this->check_params('user_head_icon',request()->param(true));
         //
+
         $head_img_path = $this->upload_file($data['user_icon'],'head_img');
+        die;
         $head_icon['user_id']=$data['user_id'];
         $head_icon['user_icon']=$head_img_path;
         $result = model('User')->upload_head_icon($head_icon);
