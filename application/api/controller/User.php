@@ -135,6 +135,49 @@ class User extends Common
         }
 
     }
+
+   //绑定邮箱,手机号 user_id,user_name,code
+    public function bind_username(){
+        $user_type = [];
+        $update_data = [];
+        $data = $this->check_params('sceneBind_user_email_phone',request()->except(['time','token']));
+        $this->check_code($data['user_name'],$data['code']);
+        //检测$data['user_name']是手机号还是邮箱
+        $user_name_type = $this->checkUsername($data["user_name"]);
+        switch ($user_name_type){
+            case 'phone':
+                $update_data['user_email'] = $data['user_name'];
+                $user_type['type'] = '用户手机';
+                break;
+            case 'email':
+                $update_data['user_phone'] = $data['user_name'];
+                $user_type['type'] = '用户邮箱';
+                break;
+        }
+        $res = model('User')->bind_username($data,$update_data);
+        if($res==1){
+            $this->return_msg('200',$user_type['type'].'绑定成功');
+        }else{
+            $this->return_msg('400',$user_type['type'].'绑定失败');
+        }
+    }
+
+    //用户设定昵称 user_id,user_nickname
+    public function nickname(){
+       $data = $this->check_params('user_nickname',request()->except(['time','token']));
+       $res = model('User')->setNickname($data);
+       switch ($res){
+           case 1:
+               $this->return_msg('400','该昵称已被占用');
+               break;
+           case 2:
+               $this->return_msg('200','修改昵称成功');
+               break;
+           case 3:
+               $this->return_msg('400','修改昵称失败');
+               break;
+       }
+    }
     //validate 场景
     public function check_params($check_scene, $arr)
         {

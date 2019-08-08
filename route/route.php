@@ -11,3 +11,9 @@ Route::rule('user/user_icon','api/user/user_icon','post');
 Route::rule('user/change_pwd','api/user/change_pwd','post');
 //用户找回密码
 Route::rule('user/find_pwd','api/user/change_pwd','post');
+//用户绑定邮箱手机号码
+Route::rule('user/bind_username','api/user/change_pwd','post');
+//用户设定昵称
+Route::rule('user/nickname','api/user/change_pwd','post');
+
+

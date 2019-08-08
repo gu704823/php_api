@@ -49,6 +49,27 @@ class User extends Model
         $result =  $this->where($data1)->setField('user_pwd',$data2);
         return $result;
     }
+    public function bind_User_name($data1,$data2){
+         $result = $this->where('user_id',$data1['user_id'])->update($data2);
+         if($result!==false){
+            return 1;
+        }
+    }
+    public function setNickname($data){
+         $result = $this->where('user_nickname',$data['user_nickname'])->find();
+         if($result){
+             return 1;
+         }else{
+             $result = $this->where('user_id',$data['user_id'])->setField('user_nickname',$data['user_nickname']);
+             if($result){
+                 return 2;
+             }else{
+                 return 3;
+             }
+         }
+
+
+    }
 
 
 
