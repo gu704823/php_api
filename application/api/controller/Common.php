@@ -57,8 +57,8 @@ class Common extends Controller
     }
     public function return_msg($code,$msg='',$data=[]){
         $return_data['code']=$code;
-        $return_data['msg']=$msg;
-        $return_data['reason']=$data;
+        $return_data['message']=$msg;
+        $return_data['result']=$data;
         echo json_encode($return_data);
         die;
     }
